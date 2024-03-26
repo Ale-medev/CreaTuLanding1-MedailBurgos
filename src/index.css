@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --assets-axis-x: 1rem;
+
+
+}
+
+
+
+html{
+  font-family: 'Inter Variable', sans-serif;
+  font-size: calc(16px + (30 - 16) * ((100vw - 375px) / (767 - 375)));
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@media screen and (min-width: 768px) {
+  :root{
+    --assets-axis-x: 5.55556rem;
+  }
+
+  html{
+    font-size: calc(9px + (16 - 9) * ((100vw - 768px) / (1440 - 768)));
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  html{
+    font-size: calc(16px + (32 - 16) * ((100vw - 1440px) / (2880 - 1440)));
+  }
+}
+
