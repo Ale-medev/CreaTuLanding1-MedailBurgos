@@ -1,2 +1,2 @@
-# Primera pre-entrega Curso React
+# Segunda pre-entrega Curso React
 
