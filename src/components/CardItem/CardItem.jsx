@@ -15,8 +15,14 @@ export default function CardItem({id, title, image, price, stock}){
                     
 
                 <div className="flex items-center">      
-                    <span className="text-xs font-semibold rounded bg-indigo-200 text-indigo-800 p-1">
-                        {stock > 0 ? 'Hay stock' : 'Sin stock'}
+                    <span
+                        className={`text-xs font-semibold rounded p-1 ${
+                            stock > 0
+                                ? "bg-indigo-200 text-indigo-800"
+                                : " bg-gray-200 text-gray-800"
+                        }`}
+                    >
+                        {stock > 0 ? "Hay stock" : "Sin stock"}
                     </span>
                 </div>
 

@@ -7,7 +7,7 @@ export default function Navbar() {
     return(
         <header className="fixed flex justify-between items-center w-full px-[var(--assets-axis-x)] py-8 backdrop-blur-sm bg-black/60 border-b-slate-900 border-b-0 z-10">
             <div className="flex-grow basis-0">
-                <img src={logo} className="w-16" alt="Logo" />
+                <Link className="block w-max" to='/'><img src={logo} className="w-16" alt="Logo" /></Link>
             </div>
 
             <div>

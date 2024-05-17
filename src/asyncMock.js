@@ -1,9 +1,9 @@
-const products = [
+export const products = [
     {
         id: 1,
         title: 'La Cosa de Otro Mundo',
         price: 10.25,
-        category: 'Ciencia ficción',
+        category: 'Ciencia-ficcion',
         image: 'https://i.pinimg.com/564x/43/15/e6/4315e6a187759dc06ee1ceffd79b6e9d.jpg',
         shortDescription: '¡Lleva a casa el terror con este espeluznante póster de "La Cosa de Otro Mundo"! Calidad excepcional que hará temblar tus paredes.',
         stock: 3,
@@ -17,7 +17,7 @@ const products = [
         id: 2,
         title: 'Alien',
         price: 11.50,
-        category: 'Ciencia ficción',
+        category: 'Ciencia-ficcion',
         image: 'https://i.pinimg.com/564x/63/e4/75/63e47574b5ba178f51e63dd6f8a7cefe.jpg',
         shortDescription: '¡Un póster icónico para los amantes del terror espacial! Captura la esencia de "Alien" con este póster de calidad cinematográfica.',
         stock: 10,
@@ -31,7 +31,7 @@ const products = [
         id: 3,
         title: 'Depredador',
         price: 10.25,
-        category: 'Ciencia ficción',
+        category: 'Ciencia-ficcion',
         image: 'https://i.pinimg.com/564x/f9/1e/62/f91e62e0c852bf4191868c09f8dc52d4.jpg',
         shortDescription: '¡Prepárate para la caza con este impresionante póster de "Depredador"! Una calidad insuperable para los fanáticos del género.',
         stock: 0,
