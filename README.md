@@ -1,2 +1,2 @@
-# Segunda pre-entrega Curso React
+# Proyecto final Curso React
 
