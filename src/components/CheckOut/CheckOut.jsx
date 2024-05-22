@@ -1,6 +1,9 @@
-import { Timestamp, addDoc, collection } from "firebase/firestore"
+import { Timestamp, addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore"
 import { useContext, useState } from "react"
 import Context from "../../context/CartContext"
+import { db } from "../../config/firebase"
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckOut() {
 
@@ -11,11 +14,11 @@ export default function CheckOut() {
         address: '',
     })
 
-    const {error, setError} = useState({})
+    const [error, setError] = useState({})
 
-    const {cart, getTotal} = useContext(Context)
+    const {cart, getTotal, clearCart} = useContext(Context)
 
-    console.log(cart)
+    const navigate = useNavigate();
 
     const updateUser = (e) => {
         setUser((user) => ({
@@ -26,27 +29,88 @@ export default function CheckOut() {
 
     const validateForm = () => {
         const errors = {}
-        if(!user.name){
-            errors.name="Tienes un agregar un nombre"
+        if (!user.name) {
+            errors.name = "Tienes que completar un nombre"
+        } else if (user.name.length < 3) {
+            errors.name = "El nombre debe tener al menos 3 caracteres"
+        }
+
+        if (!user.email) {
+            errors.email = "Tienes que completar un email"
+        } else if (!/\S+@\S+\.\S+/.test(user.email)) {
+            errors.email = "El email no es válido"
+        }
+
+        if (!user.phone) {
+            errors.phone = "Tienes que completar con tu número telefónico"
+        } else if (!/^\d{10}$/.test(user.phone)) {
+            errors.phone = "El número de teléfono debe tener 10 dígitos"
+        }
+
+        if (!user.address) {
+            errors.address = "Tienes que completar con tu dirección"
+        } else if (user.address.length < 5) {
+            errors.address = "La dirección debe tener al menos 5 caracteres"
         }
 
         setError(errors)
-        return object.ket(errors).length === 0
+        return Object.keys(errors).length === 0
     }
 
-    const getOrder = async ()=> {
+    const getOrder = async (e)=> {
+        e.preventDefault();
         const isFormValid = validateForm()
         if(isFormValid){
             const ordersCollection = collection(db, 'orders')
 
-            const order = { 
-                buyer: user,
-                cart: cart,
-                total: getTotal(),
+            try{
+
+                for(const item of cart){
+                    const productRef = doc(db, 'products', item.id)
+                    const productDoc = await getDoc(productRef)
+
+                    const currentStock = productDoc.data().stock
+
+                    if(currentStock >= item.quantity){
+                        await updateDoc(productRef, {
+                            stock: currentStock - item.quantity
+                        })
+                    }else{
+                        Swal.fire({
+                            title: 'Error',
+                            text: `No hay suficiente stock para ${item.name}`,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        })
+                        return;
+                    }
+
+                    const order = { 
+                        buyer: user,
+                        cart: cart,
+                        total: getTotal(),
+                    }
+
+                    const orderDocRef = await addDoc(ordersCollection, order)
+                    Swal.fire({
+                        title: 'Gracias por tu compra',
+                        text: `El numero de orden es: ${orderDocRef.id}`,
+                        icon: 'success',
+                        confirmButtonText: 'Volver a inicio'
+                    }).then(()=>{
+                        clearCart()
+                        navigate('/')
+                    })
+                    
+                }
+
+
+            }catch(error){
+                console.log(error)
             }
 
-            const orderDocRef = await addDoc(ordersCollection, order)
-            console.log(orderDocRef)
+        }else{
+            console.log("Formulario incompleto:", error);
         }
     }
 
@@ -75,9 +139,9 @@ export default function CheckOut() {
                             id="name"
                             name="name"
                             className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
-                            required
                             onChange={updateUser}
                             />
+                            {error.name && <p class="mt-2 text-sm text-red-500"><span class="font-medium">Oops!</span> {error.name}</p>} 
                         </div>
                         <div className="mb-5">
                             <label
@@ -91,26 +155,27 @@ export default function CheckOut() {
                             id="email"
                             name="email"
                             className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
-                            required
+
                             onChange={updateUser}
                             />
+                            {error.email && <p class="mt-2 text-sm text-red-500"><span class="font-medium">Oops!</span> {error.email}</p>} 
                         </div>
 
                         <div className="mb-5">
                             <label
-                            htmlFor="tel"
+                            htmlFor="phone"
                             className="block mb-2 text-sm font-medium text-white"
                             >
                             Teléfono*
                             </label>
                             <input
                             type="tel"
-                            id="tel"
-                            name="tel"
+                            id="phone"
+                            name="phone"
                             className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
-                            required
                             onChange={updateUser}
                             />
+                            {error.phone && <p class="mt-2 text-sm text-red-500"><span class="font-medium">Oops!</span> {error.phone}</p>} 
                         </div>
 
                         <div className="mb-10">
@@ -125,9 +190,9 @@ export default function CheckOut() {
                             id="address"
                             name="address"
                             className=" border  text-sm rounded-lg  block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
-                            required
                             onChange={updateUser}
                             />
+                            {error.address && <p class="mt-2 text-sm text-red-500"><span class="font-medium">Oops!</span> {error.address}</p>} 
                         </div>
                       
                         <div className="flex justify-center">

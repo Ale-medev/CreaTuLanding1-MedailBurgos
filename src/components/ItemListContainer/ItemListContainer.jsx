@@ -1,18 +1,21 @@
 import { useEffect, useState, useContext } from "react"
-import { getProducts, getProductsByCategory } from "../../asyncMock"
 import ItemList from "../ItemList/ItemList"
 import { useParams } from "react-router-dom"
 import Context from "../../context/CartContext"
 import { db } from "../../config/firebase"
 import { collection, getDocs, query, where } from "firebase/firestore"
+import Loading from "../Loading/Loading"
 
 export default function ItemListContainer({ greeting }) {
 
     const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true)
     const {categoryId} = useParams()
 
 
     useEffect(()=>{
+
+        setLoading(true)
 
         const getData = async ()=>{
             const coleccion = collection(db, 'products')
@@ -33,7 +36,7 @@ export default function ItemListContainer({ greeting }) {
                 })
 
                 setProducts(products)
-                
+                setLoading(false)
         }
         getData()
 
@@ -45,7 +48,11 @@ export default function ItemListContainer({ greeting }) {
             <section className="min-h-screen w-full px-[var(--assets-axis-x)] py-40">
                 <h1 className="font-bold text-7xl text-center text-white mb-20">{greeting}</h1>
 
-                <ItemList products={products} />
+                {
+                    loading ?
+                        <Loading /> : <ItemList products={products} />
+                }
+               
             </section>
         </main>
     )

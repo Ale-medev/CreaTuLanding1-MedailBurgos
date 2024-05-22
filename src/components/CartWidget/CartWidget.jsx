@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import Context from "../../context/CartContext";
 
 export default function CartWidget() {
-    const {getQuantity} = useContext(Context)
+    const {getQuantity, setGoToCart, goToCart} = useContext(Context)
     const quantity = getQuantity();
     const textColorClass = quantity === 0 ? 'text-gray-700 group-hover:text-gray-800' : 'text-white group-hover:text-slate-300';
     const tooltipColorClass = quantity === 0 ? 'opacity-0 invisible' : 'opacity-1 visible';
 
+    const handleClick = () => {
+        setGoToCart(false);
+    };
+
     return (
-        <Link to="/cart" className="group -m-2 flex items-center p-2 relative">
+        <Link to="/cart" className="group -m-2 flex items-center p-2 relative" onClick={handleClick}>
             <svg
                 className="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                 fill="none"
@@ -28,9 +32,12 @@ export default function CartWidget() {
                 {quantity}
             </span>
 
-            <div className={`${tooltipColorClass} w-max transition duration-300 ease-out absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white rounded-lg shadow-sm tooltip bg-gray-700 top-full group-hover:bg-gray-500 -right-5`}>
-                Ir al carrito
-            </div>
+            {
+                goToCart &&
+                    <div className={`${tooltipColorClass} w-max transition duration-300 ease-out absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white rounded-lg shadow-sm tooltip bg-gray-700 top-full group-hover:bg-gray-500 -right-5`}>
+                        Ir al carrito
+                    </div>
+            }
         </Link>
 
         

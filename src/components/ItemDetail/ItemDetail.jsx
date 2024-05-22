@@ -4,9 +4,11 @@ import Context from "../../context/CartContext"
 
 export default function ItemDetail({id, title, image, category, shortDescription, price, stock}){
 
-    const { addItem } = useContext(Context);
+    const { addItem, setGoToCart } = useContext(Context);
 
     const onAdd = (quantity) => {
+
+        setGoToCart(true);
 
         const item = {
             id,
@@ -34,7 +36,7 @@ export default function ItemDetail({id, title, image, category, shortDescription
                     </div>
                     <h5 className="text-5xl font-semibold tracking-tight text-white mb-8">{title}</h5>
                 </div>  
-                <div className="text-4xl font-bold text-white mb-4">${price}</div>
+                <div className="text-4xl font-bold text-white mb-4">${price != null ? price.toFixed(2) : "0.00"}</div>
                 <div className="text-xs font-semibold text-white mb-4">
                         stock: {stock ===0 ? 'Sin stock' : stock}
                 </div> 

@@ -47,7 +47,7 @@ export default function cart(){
                             
                                                 <div className="text-end md:order-4 md:w-32">
                                                     <p className="text-base font-bold text-white">
-                                                        ${prod.price * prod.quantity}
+                                                        ${ (prod.price * prod.quantity).toFixed(2) }
                                                     </p>
                                                 </div>
                                             </div>

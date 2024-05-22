@@ -5,6 +5,7 @@ const Context = createContext()
 export function ContextProvider({ children }){
     
     const [cart, setCart] = useState([])
+    const [goToCart, setGoToCart] = useState(true)
 
     const addItem = (productToAdd, quantity) => {
         const newProduct = {
@@ -20,6 +21,7 @@ export function ContextProvider({ children }){
                 return item
             })
             setCart(updatedCart)
+           
         }else{
             setCart([...cart, newProduct])
         }
@@ -36,10 +38,10 @@ export function ContextProvider({ children }){
         setCart([...deleteItem])
     }
 
-    const getTotal = () =>{
-        const total = cart.reduce((acc, item)=> acc + item.price * item.quantity, 0)
-        return total
-    }
+    const getTotal = () => {
+        const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        return total.toFixed(2);
+      };
 
     const clearCart = () => {
         setCart([])
@@ -54,9 +56,6 @@ export function ContextProvider({ children }){
         return total
     }
 
-    console.log(cart)
-    console.log(getQuantity())
-
     return(
         <Context.Provider 
             value={{
@@ -65,7 +64,9 @@ export function ContextProvider({ children }){
                 removeItem,
                 clearCart,
                 getQuantity,
-                getTotal
+                getTotal,
+                goToCart,
+                setGoToCart
             }}
         >
             {children}

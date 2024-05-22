@@ -27,7 +27,7 @@ export default function CardItem({id, title, image, price, stock}){
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <span className="text-3xl font-bold text-white">${price}</span>
+                    <span className="text-3xl font-bold text-white">${price != null ? price.toFixed(2) : "0.00"}</span>
                     <Link className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" to={`/product/${id}`}>Ver detalle</Link>
                 </div>
             </div>
